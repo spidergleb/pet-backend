@@ -12,10 +12,12 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+
 // ===== Middleware =====
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend URL
+    origin: allowedOrigins, // your frontend URL
     credentials: true, // if you send cookies or auth headers
   })
 ); // Enable CORS for all origins — customize if needed
