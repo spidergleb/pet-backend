@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+console.log("🚀 ~ allowedOrigins:", allowedOrigins)
 
 // ===== Middleware =====
 app.use(
@@ -34,4 +35,5 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Allowed origins ${allowedOrigins}`);
 });
