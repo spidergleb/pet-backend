@@ -13,9 +13,13 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
-console.log("🚀 ~ allowedOrigins:", allowedOrigins)
 
 // ===== Middleware =====
+// app.use(async (req, res, next) => {
+//   // req.context = await createContext();
+//   next();
+// });
+
 app.use(
   cors({
     origin: allowedOrigins, // your frontend URL
@@ -35,5 +39,6 @@ app.get("/", (req, res) => {
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
-  console.log(`Allowed origins ${allowedOrigins}`);
 });
+
+export default app;

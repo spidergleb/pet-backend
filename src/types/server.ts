@@ -1,5 +1,5 @@
 export type Server = {
-    id: string
+    id: number
     name: string
-    destination: string
+    distance: number
 }
