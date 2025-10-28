@@ -8,6 +8,11 @@ async function createRedisClient(
     url: redisUrl,
   });
 
+  await client.set("key", "value");
+  const value = await client.get("key");
+  console.log(value, "redis");
+
+  console.log("🔧 Redis URL:", process.env.REDIS_URL);
   client.on("error", (err) => console.error("❌ Redis Client Error", err));
 
   await client.connect();
