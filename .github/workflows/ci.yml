@@ -7,7 +7,7 @@ on:
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
-
+    environment: production
     services:
       postgres:
         image: postgres:15
@@ -28,13 +28,13 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - run: npm ci
 
       - run: npm run test
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/pet
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
 
       - run: npm run build
 
