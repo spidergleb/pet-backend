@@ -22,6 +22,9 @@ async function destroyTestingDiContext(): Promise<void> {
   }
 
   await diContext.dbClientOriginal.close();
+
+  // redis
+  await diContext.redisClient.close();
 }
 
 export default destroyTestingDiContext;
