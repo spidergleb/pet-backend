@@ -1,13 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
-import db from "../db/knex.js";
+import { getContext } from "../context.js";
+
 
 export const getServers = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const { dbClient } = getContext();
   try {
-    const servers = await db("servers").select("*");
+    const servers = await dbClient.builder("servers").select("*");
     res.json(servers);
   } catch (err) {
     next(err);
@@ -19,9 +21,12 @@ export const createServer = async (
   res: Response,
   next: NextFunction
 ) => {
+  const { dbClient } = getContext();
   const { distance, name } = req.body;
   try {
-    const servers = await db("servers").insert({ distance, name });
+    const servers = await dbClient
+    .builder("servers")
+    .insert({ distance, name });
     res.json(servers);
   } catch (err) {
     next(err);
@@ -33,9 +38,12 @@ export const updateServer = async (
   res: Response,
   next: NextFunction
 ) => {
+  const { dbClient } = getContext();
   const { distance, name } = req.body;
   try {
-    const servers = await db("servers").update({ distance, name });
+    const servers = await dbClient
+    .builder("servers")
+    .update({ distance, name });
     res.json(servers);
   } catch (err) {
     next(err);
@@ -47,9 +55,10 @@ export const deleteServer = async (
   res: Response,
   next: NextFunction
 ) => {
+  const { dbClient } = getContext();
   const { id } = req.body;
   try {
-    const servers = await db("servers").delete().where({ id });
+    const servers = await dbClient.builder("servers").delete().where({ id });
     res.json(servers);
   } catch (err) {
     next(err);

@@ -1,0 +1,21 @@
+name: CI
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run test
+      - run: npm run build
+      - uses: JorgeLNJunior/render-deploy@v1.4.6
+        with:
+        service_id: ${{ secrets.RENDER_SERVICE_ID }}
+        api_key: ${{ secrets.RENDER_API_KEY }}
+

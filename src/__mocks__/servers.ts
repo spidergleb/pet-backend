@@ -1,5 +1,4 @@
 import { Server } from "../types/server.js";
-import { v4 as generateId } from "uuid";
 
 const SERVERS_MOCK: Server[] = [
   { id: 1, name: "United States #40", distance: 1652 },

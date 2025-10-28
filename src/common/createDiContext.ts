@@ -3,13 +3,12 @@ import createDbClient from "./createDbClient.js";
 
 async function createDiContext(): Promise<DiContext> {
   const config = process.env as Config;
-  console.log("🚀 ~ createDiContext ~ config:", config);
   const dbClient = createDbClient(config.DATABASE_URL);
 
   return {
     // logger,
+    dbClientOriginal: dbClient,
     dbClient,
-    // dbClientOriginal: dbClient,
     config,
   };
 }

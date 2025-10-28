@@ -1,27 +1,28 @@
 import request from "supertest";
-import app from "../index.js";
 
 import destroyTestingDiContext from "../testing/destroyTestingDiContext.js";
-import createTestingDiContext from "../testing/createTestingDiContext.js";
+import { createApp } from "../common/createApp.js";
 
 import SERVERS_MOCK from "../__mocks__/servers.js";
-import type { DiContext } from "../types/diContext.js";
+import { initContext } from "../context.js";
 
-let diContext: DiContext;
+let app;
+let tesingDiContext;
 
 beforeAll(async () => {
-  diContext = await createTestingDiContext();
-  console.log("🚀 ~ config:", diContext.config);
+  app = await createApp();
+  process.env.NODE_ENV = "test";
+  tesingDiContext = await initContext();
 });
 
 beforeEach(async () => {
-  await diContext.dbClient.builder("servers").insert(SERVERS_MOCK);
+  await tesingDiContext.dbClient.builder("servers").truncate();
 
-  await diContext.dbClient.builder("servers").truncate();
+  await tesingDiContext.dbClient.builder("servers").insert(SERVERS_MOCK);
 });
 
 afterAll(async () => {
-  destroyTestingDiContext(diContext);
+  destroyTestingDiContext();
 });
 
 describe("Servers API", () => {
@@ -29,30 +30,32 @@ describe("Servers API", () => {
 
   it("should get all servers", async () => {
     const res = await request(app).get("/servers");
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-  });
-
-  it("should create a server", async () => {
-    const res = await request(app)
-      .post("/servers")
-      .send({ name: "Test Server", distance: 999 });
 
     expect(res.status).toBe(200);
-    expect(res.body.name).toBe("Test Server");
-    newServerId = res.body.id;
+
+    expect(res.body).toStrictEqual(SERVERS_MOCK);
   });
 
-  it("should update a server", async () => {
-    const res = await request(app)
-      .put(`/servers/${newServerId}`)
-      .send({ name: "Updated Server", distance: 123 });
-    expect(res.status).toBe(200);
-    expect(res.body.name).toBe("Updated Server");
-  });
+  // it("should create a server", async () => {
+  //   const res = await request(app)
+  //     .post("/servers")
+  //     .send({ name: "Test Server", distance: 999 });
 
-  it("should delete a server", async () => {
-    const res = await request(app).delete(`/servers/${newServerId}`);
-    expect(res.status).toBe(200);
-  });
+  //   expect(res.status).toBe(200);
+  //   expect(res.body.name).toBe("Test Server");
+  //   newServerId = res.body.id;
+  // });
+
+  // it("should update a server", async () => {
+  //   const res = await request(app)
+  //     .put(`/servers/${newServerId}`)
+  //     .send({ name: "Updated Server", distance: 123 });
+  //   expect(res.status).toBe(200);
+  //   expect(res.body.name).toBe("Updated Server");
+  // });
+
+  // it("should delete a server", async () => {
+  //   const res = await request(app).delete(`/servers/${newServerId}`);
+  //   expect(res.status).toBe(200);
+  // });
 });

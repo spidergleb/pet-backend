@@ -1,6 +1,8 @@
+import { getContext } from "../context.js";
 import type { DiContext } from "../types/diContext.js";
 
-async function destroyTestingDiContext(diContext: DiContext): Promise<void> {
+async function destroyTestingDiContext(): Promise<void> {
+  const diContext = getContext();
   let row: { testDbName: string };
   try {
     [row] = await diContext.dbClient.builder.select(
@@ -13,12 +15,14 @@ async function destroyTestingDiContext(diContext: DiContext): Promise<void> {
   await diContext.dbClient.close();
 
   try {
-    await diContext.dbClient.builder.raw(`DROP DATABASE "${row.testDbName}";`);
+    await diContext.dbClientOriginal.builder.raw(
+      `DROP DATABASE "${row.testDbName}";`
+    );
   } catch (error) {
     throw error;
   }
 
-  await diContext.dbClient.close();
+  await diContext.dbClientOriginal.close();
 }
 
 export default destroyTestingDiContext;

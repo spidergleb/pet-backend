@@ -9,10 +9,11 @@ export type Config = {
 
 export type DiContext = {
   dbClient: DBClient;
+  dbClientOriginal: DBClient;
   config: Config;
 };
 
 export type DBClient = {
-  builder: Knex;  
+  builder: Knex;
   close(): Promise<void>;
 };
