@@ -1,5 +1,4 @@
 import { getContext } from "../context.js";
-import type { DiContext } from "../types/diContext.js";
 
 async function destroyTestingDiContext(): Promise<void> {
   const diContext = getContext();

@@ -1,15 +1,18 @@
+import { RedisClientType } from "@redis/client";
 import { Knex } from "knex";
 
 export type Config = {
   PORT: string;
   DATABASE_URL_PROD: string;
   DATABASE_URL: string;
+  REDIS_URL: string;
   ALLOWED_ORIGINS: string;
 };
 
 export type DiContext = {
   dbClient: DBClient;
   dbClientOriginal: DBClient;
+  redisClient: RedisClientType;
   config: Config;
 };
 

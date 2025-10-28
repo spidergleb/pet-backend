@@ -21,7 +21,6 @@ export async function initContext() {
   } catch (error) {
     throw error;
   }
-  console.log("🚀 ~ row:", row);
   return diContext;
 }
 
