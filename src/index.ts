@@ -10,7 +10,7 @@ const startServer = async () => {
   const client = await createRedisClient(process.env.REDIS_URL);
   await client.set("key", "value");
   const value = await client.get("key");
-  console.log(value);
+  console.log(value, "redis");
 
   app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
