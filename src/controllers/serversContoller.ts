@@ -8,6 +8,8 @@ export const getServers = async (
   next: NextFunction
 ) => {
   const { dbClient } = getContext();
+
+  console.log("#getServers: getting servers...")
   try {
     const servers = await dbClient.builder("servers").select("*");
     res.json(servers);
