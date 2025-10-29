@@ -1,25 +1,31 @@
 import { createApp } from "./common/createApp.js";
-import createRedisClient from "./common/createRedisClient.js";
-import { getContext } from "./context.js";
+import { initContext } from "./context.js";
 import shutdown from "./utils/shutDown.js";
 
 const PORT = process.env.PORT || 4000;
 
-const startServer = async () => {
-  const app = await createApp();
+let diContext;
 
-  const { redisClient } = getContext();
+async function main() {
+  try {
+    diContext = await initContext();
 
-  await redisClient.set("key", "value");
-  const value = await redisClient.get("key");
-  console.log(value, "redis");
+    const app = await createApp();
 
-  app.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
-  });
-};
+    await diContext.redisClient.set("key", "value");
+    const value = await diContext.redisClient.get("key");
+    console.log(value, "redis");
 
-startServer();
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Failed to start server:", err);
+    process.exit(1);
+  }
+}
+
+main();
 
 process.once("SIGTERM", () => shutdown("SIGTERM"));
 process.once("SIGINT", () => shutdown("SIGINT"));
