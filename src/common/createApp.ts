@@ -2,7 +2,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import serverRoutes from "../routes/serverRoute";
+import serverRoutes from "../routes/serverRoutes";
+import authRoutes from "../routes/authRoutes";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ export async function createApp() {
   app.use(express.json());
 
   app.use("/servers", serverRoutes);
+  app.use("/auth", authRoutes);
 
   app.get("/", (req, res) => {
     res.json({ message: "Backend API is running 🚀" });
